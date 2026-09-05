@@ -6,7 +6,7 @@
   const FBRI = (window.FBRI = window.FBRI || {});
 
   FBRI.DEFAULT_SETTINGS = {
-    // Active speed mode: "safe" | "fast" | "turbo" | "api".
+    // Active speed mode: "safe" | "fast" | "turbo".
     mode: "safe",
 
     // Try Facebook's own bulk "Invite all" button before looping (all modes).
@@ -28,9 +28,6 @@
     // --- Turbo mode: burst-click everything loaded, tiny pause between passes ---
     turboInterClickMs: 0,
     turboBatchPauseMs: 150,
-
-    // --- Experimental Direct API (GraphQL) mode ---
-    apiConcurrency: 6,
 
     // Safety cap: stop after this many invites in one run. 0 = unlimited.
     maxPerRun: 50,

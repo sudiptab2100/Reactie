@@ -14,9 +14,7 @@
     safe: "",
     fast: "Fast: short delays — moderate risk of a temporary Facebook block.",
     turbo:
-      "⚠ Turbo sends very fast — higher risk of a temporary Facebook block.",
-    api:
-      "⚠ Experimental API mode — fragile; captures Facebook’s own request and replays it. Falls back to Turbo if capture fails. Higher block/ToS risk."
+      "⚠ Turbo sends very fast — higher risk of a temporary Facebook block."
   };
 
   const TEMPLATE = [
@@ -40,7 +38,6 @@
     '      <option value="safe">Safe (1.5–4s, lowest risk)</option>',
     '      <option value="fast">Fast (short delays)</option>',
     '      <option value="turbo">Turbo (all at once)</option>',
-    '      <option value="api">Experimental API (GraphQL)</option>',
     "    </select>",
     "  </div>",
     '  <label class="fbri-check"><input type="checkbox" class="fbri-native"> Use native “Invite all” if available</label>',
@@ -57,7 +54,6 @@
     '    <div class="fbri-field"><span>Fast delay min (ms)</span><input type="number" min="0" class="fbri-fast-min"></div>',
     '    <div class="fbri-field"><span>Fast delay max (ms)</span><input type="number" min="0" class="fbri-fast-max"></div>',
     '    <div class="fbri-field"><span>Turbo pause (ms)</span><input type="number" min="0" class="fbri-turbo-pause"></div>',
-    '    <div class="fbri-field"><span>API concurrency</span><input type="number" min="1" class="fbri-api-conc"></div>',
     '    <div class="fbri-field"><span>Max per run (0=∞)</span><input type="number" min="0" class="fbri-max-run"></div>',
     '    <div class="fbri-field"><span>Long pause every</span><input type="number" min="0" class="fbri-pause-every"></div>',
     '    <div class="fbri-field"><span>Long pause (ms)</span><input type="number" min="0" class="fbri-pause-ms"></div>',
@@ -116,7 +112,6 @@
     el(root, ".fbri-fast-min").value = s.fastMinDelayMs;
     el(root, ".fbri-fast-max").value = s.fastMaxDelayMs;
     el(root, ".fbri-turbo-pause").value = s.turboBatchPauseMs;
-    el(root, ".fbri-api-conc").value = s.apiConcurrency;
     el(root, ".fbri-max-run").value = s.maxPerRun;
     el(root, ".fbri-pause-every").value = s.longPauseEvery;
     el(root, ".fbri-pause-ms").value = s.longPauseMs;
@@ -159,10 +154,6 @@
       turboBatchPauseMs: intOr(
         el(root, ".fbri-turbo-pause").value,
         base.turboBatchPauseMs
-      ),
-      apiConcurrency: Math.max(
-        1,
-        intOr(el(root, ".fbri-api-conc").value, base.apiConcurrency)
       ),
       maxPerRun: intOr(el(root, ".fbri-max-run").value, base.maxPerRun),
       longPauseEvery: intOr(

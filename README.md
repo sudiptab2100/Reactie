@@ -6,7 +6,7 @@ yet invited** to like your Page and clicks **Invite** for each of them — skipp
 who are already **Invited** or already **Following**.
 
 It works from a small floating panel, offers selectable **speed modes** (Safe / Fast /
-Turbo / experimental API) so you can trade speed for safety, can use Facebook's own
+Turbo) so you can trade speed for safety, can use Facebook's own
 **"Invite all"** button when present, uses **randomized human-like delays** and a
 **per-run cap** to stay under Facebook's limits, and includes a **Dry run** preview so you
 can verify who would be invited before any real clicks happen.
@@ -44,7 +44,6 @@ slow on posts with hundreds of reactors. You can now pick how fast to go from th
 | **Safe** (default) | One invite, then a randomized **1.5–4s** pause | Slowest | Lowest |
 | **Fast** | One invite, then a short **200–600ms** pause | ~5–15× faster | Moderate |
 | **Turbo** | Clicks **every loaded** Invite button in one burst, scrolls, repeats | Near-instant | Highest |
-| **Experimental API** | Replays Facebook's own invite request for all reactors with limited concurrency | Fastest raw sending | Highest / fragile |
 
 **Use native "Invite all" if available** (checkbox, on by default): before looping, the
 extension looks for Facebook's own bulk button (e.g. **"Invite all"**, **"Invite all who
@@ -58,10 +57,6 @@ your selected speed mode.
 - **Fast** is a good balance for medium lists.
 - **Turbo** is fastest via the UI but most likely to trip Facebook's rate limit on big lists
   — the run auto-stops if that happens, so you simply continue later.
-- **Experimental API** replays Facebook's own network request. It's the fastest way to *send*
-  but it is **fragile** (depends on Facebook's private GraphQL format) and **higher ToS/block
-  risk**. It captures the request from your own session — it never hard-codes anything — and if
-  capture fails it **automatically falls back to Turbo**. Treat it as experimental.
 
 Whatever the mode, **you cannot exceed Facebook's server-side limits** — expect possible
 temporary blocks on very large lists regardless. That's normal, and the auto-stop protects
@@ -145,7 +140,7 @@ To update after editing files, click the **reload** icon on the extension card.
 2. Open one of your Page's posts.
 3. Click the **reactions count** (e.g. the "👍❤️😆 1.2K" summary) to open the reactions dialog.
 4. In the floating panel:
-   - **Pick a Speed mode** (Safe / Fast / Turbo / Experimental API). Leave **Use native
+   - **Pick a Speed mode** (Safe / Fast / Turbo). Leave **Use native
      "Invite all" if available** ticked so the extension uses Facebook's own bulk button when
      it's offered. See [Speed modes](#speed-modes--inviting-everyone-faster) above.
    - **Check the detected Page** shown in the panel (name + logo). Correct the name if it's
@@ -168,13 +163,12 @@ Open **Settings** in the panel. Values persist via `chrome.storage`.
 
 | Setting | Meaning | Default |
 |---|---|---|
-| Speed mode | Safe / Fast / Turbo / Experimental API (see above) | Safe |
+| Speed mode | Safe / Fast / Turbo (see above) | Safe |
 | Use native "Invite all" | Click Facebook's own bulk button first when present | On |
 | Keep running in background | Play a silent tone so Chrome won't throttle a background tab | On |
 | Safe delay min / max (ms) | Randomized wait between invites in **Safe** mode | 1500 / 4000 |
 | Fast delay min / max (ms) | Randomized wait between invites in **Fast** mode | 200 / 600 |
 | Turbo pause (ms) | Small pause between bursts in **Turbo** mode | 150 |
-| API concurrency | Parallel in-flight requests in **Experimental API** mode | 6 |
 | Max per run | Stop after this many invites. `0` = unlimited | 50 |
 | Long pause every | Take a longer cool-down after every N invites. `0` = off | 0 |
 | Long pause (ms) | Duration of that cool-down | 30000 |
@@ -198,17 +192,14 @@ You can list several variants separated by commas (e.g. `Invitado, Invitada`).
 ## Safety & Facebook limits
 
 - Facebook enforces its own limits on how many invites you can send and how fast.
-  Sending too many too quickly can get the action **temporarily blocked**. Faster modes
-  (**Turbo**, **Experimental API**) raise this risk — they speed up *sending* but **cannot
+  Sending too many too quickly can get the action **temporarily blocked**. The faster
+  **Turbo** mode raises this risk — it speeds up *sending* but **cannot
   bypass Facebook's server-side limits**.
 - This tool only automates clicks **you could do by hand**. Keep the **randomized delays**
   and a sensible **Max per run** to reduce risk. Consider enabling a **Long pause** for big lists.
 - If Facebook shows a "temporarily blocked" / "going too fast" dialog, the extension
   **detects it and stops automatically** — in **every** mode. If that happens, wait a while
   (hours) before trying again.
-- The **Experimental API** mode replays Facebook's own private request format; it is powerful
-  but fragile and carries higher Terms-of-Service risk. Prefer the native "Invite all" or Safe
-  mode unless you understand the trade-off.
 - Use at your own discretion and in line with Facebook's Terms.
 
 ---
@@ -225,9 +216,8 @@ npm test
 This validates the core logic in `src/`: that only **Invite** buttons are selected
 (Invited/Following excluded), the run invites everyone, the **per-run cap** is honored,
 **Dry run** never clicks, the run completes, and **block detection** works — plus the v2
-additions: native **"Invite all"** detection, **Turbo** and **Fast** modes inviting everyone,
-and the **Experimental API** replay logic (request building, bounded concurrency, dry-run,
-failure detection, and stop-on-request) using a stubbed `fetch` — and the v3 additions:
+additions: native **"Invite all"** detection, **Turbo** and **Fast** modes inviting everyone
+— and the v3 additions:
 **Page detection** (name/logo/id parsing), **already-invited / already-following** counting,
 **per-Page stats** (`statsAdd` with a stub storage, multi-Page totals + reset), and the
 **toolbar popup** rendering.
@@ -292,7 +282,7 @@ lazy-loading list of reactors with Invite / Invited / Following buttons) and loa
 ## Project structure
 
 ```
-manifest.json            MV3 manifest (isolated content scripts + MAIN-world API hook + popup)
+manifest.json            MV3 manifest (isolated content scripts + toolbar popup)
 src/
   config.js              default settings, modes, labels, chrome.storage helpers
   dom.js                 find dialog / scroller / Invite + "Invite all" buttons / block detection
@@ -301,15 +291,13 @@ src/
   keepalive.js           inaudible WebAudio keep-alive so background tabs aren't throttled
   inviter.js             mode-aware run engine (safe/fast/turbo; native bulk; cap; dry-run; stop;
                          already-invited/following counts; per-Page stats; robust termination)
-  api.js                 experimental GraphQL replay runner (isolated world)
-  api-hook.js            MAIN-world network hook: captures reactor ids + invite template
   panel.js               floating control panel UI (mode selector, Page field, counts, settings)
   panel.css              panel styles
   content.js             bootstrap: mount panel, keep it across SPA navigation
 popup.html/js/css        toolbar popup: per-Page cards (logo + name + total), grand total, reset
 icons/                   extension icons (16/48/128)
 test/
-  logic.test.js          offline jsdom tests for the core logic + modes + API replay + v3
+  logic.test.js          offline jsdom tests for the core logic + modes + v3
   e2e.mock.js            real-Chrome end-to-end run (per-person, Turbo, native Invite-all)
   mock-reactions.html    offline browser mock of the reactions dialog (with a Page header)
 ```

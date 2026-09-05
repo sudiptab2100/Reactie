@@ -26,7 +26,7 @@ function loadSrc(file) {
   vm.runInThisContext(code, { filename: file });
 }
 
-["config.js", "dom.js", "page.js", "stats.js", "keepalive.js", "inviter.js", "api.js"].forEach(
+["config.js", "dom.js", "page.js", "stats.js", "keepalive.js", "inviter.js"].forEach(
   loadSrc
 );
 
@@ -329,109 +329,6 @@ async function run() {
     });
     await FBRI.start(withNative, () => {});
     assert(bulkClicked === 1, "clicked Facebook's native 'Invite all' once");
-  }
-
-  console.log("apiBuildRequest substitutes the invitee id:");
-  {
-    const tmpl = {
-      url: "https://x/api/graphql",
-      method: "POST",
-      body: "fb_dtsg=abc&invitee_id=1000001&ref=1000001",
-      inviteeId: "1000001"
-    };
-    const req = FBRI.apiBuildRequest(tmpl, "2000002");
-    assert(req.body.indexOf("1000001") === -1, "removes the captured invitee id");
-    assert(
-      (req.body.match(/2000002/g) || []).length === 2,
-      "substitutes the target id everywhere it appeared"
-    );
-    assert(
-      req.method === "POST" && req.url === tmpl.url,
-      "preserves the template method and url"
-    );
-  }
-
-  console.log("apiRunPool replays invites with bounded concurrency:");
-  {
-    const targets = [];
-    for (let i = 0; i < 20; i++) targets.push({ id: "u" + i });
-    const tmpl = { url: "u", method: "POST", body: "id", inviteeId: "id" };
-
-    let inFlight = 0;
-    let maxInFlight = 0;
-    let calls = 0;
-    const fetchImpl = () => {
-      calls++;
-      inFlight++;
-      maxInFlight = Math.max(maxInFlight, inFlight);
-      return new Promise((resolve) =>
-        setTimeout(() => {
-          inFlight--;
-          resolve({ status: 200, text: async () => '{"data":{"ok":true}}' });
-        }, 5)
-      );
-    };
-    const res = await FBRI.apiRunPool(targets, tmpl, {
-      concurrency: 4,
-      fetchImpl
-    });
-    assert(
-      res.invited === 20 && res.failed === 0,
-      "all 20 invites succeed via the pool"
-    );
-    assert(calls === 20, "exactly one fetch per target");
-    assert(
-      maxInFlight <= 4,
-      "never exceeds the concurrency limit (peaked at " + maxInFlight + ")"
-    );
-  }
-
-  console.log("apiRunPool dry run sends nothing:");
-  {
-    let calls = 0;
-    const fetchImpl = () => {
-      calls++;
-      return Promise.resolve({ status: 200, text: async () => "{}" });
-    };
-    const targets = [{ id: "a" }, { id: "b" }, { id: "c" }];
-    const res = await FBRI.apiRunPool(targets, {}, { dryRun: true, fetchImpl });
-    assert(
-      calls === 0 && res.invited === 3,
-      "dry run counts targets but issues no requests"
-    );
-  }
-
-  console.log("apiRunPool detects failures and honors stop:");
-  {
-    const targets = [{ id: "a" }, { id: "b" }, { id: "c" }];
-    const tmpl = { url: "u", body: "id", inviteeId: "id" };
-    const fetchErr = () =>
-      Promise.resolve({
-        status: 200,
-        text: async () => '{"errors":[{"message":"blocked"}]}'
-      });
-    const res = await FBRI.apiRunPool(targets, tmpl, {
-      concurrency: 1,
-      fetchImpl: fetchErr
-    });
-    assert(
-      res.failed === 3 && res.invited === 0,
-      "GraphQL error responses count as failed"
-    );
-
-    let calls = 0;
-    let progress = 0;
-    const fetchOk = () => {
-      calls++;
-      return Promise.resolve({ status: 200, text: async () => "{}" });
-    };
-    await FBRI.apiRunPool(targets, tmpl, {
-      concurrency: 1,
-      fetchImpl: fetchOk,
-      shouldStop: () => progress >= 1,
-      onProgress: () => progress++
-    });
-    assert(calls === 1, "stops early once shouldStop() becomes true");
   }
 
   console.log("detectPageInfo reads Page name + logo + id:");

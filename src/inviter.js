@@ -4,7 +4,6 @@
  *   safe  — sequential, 1.5–4s randomized delays (lowest block risk)
  *   fast  — short randomized delays / small batches
  *   turbo — burst: click every loaded Invite button per pass (near-instant)
- *   api   — delegates to FBRI.runApi (experimental GraphQL replay)
  *
  * v3 additions:
  *   - Background keep-alive (FBRI.keepAlive) so the run doesn't stall when the
@@ -61,10 +60,6 @@
       el.dispatchEvent(ev);
     }
   }
-
-  // Shared with the experimental API runner.
-  FBRI.sleep = sleep;
-  FBRI.safeClick = safeClick;
 
   function highlight(el) {
     try {
@@ -279,20 +274,6 @@
             "No reactions list found. Open a post, click its reactions count, then try again."
         });
         return;
-      }
-
-      const mode = settings.mode || "safe";
-
-      // Experimental API mode: try the GraphQL replay; fall back to Turbo if the
-      // capture is unavailable.
-      if (mode === "api" && typeof FBRI.runApi === "function") {
-        const handled = await FBRI.runApi(settings, say);
-        if (handled) return;
-        say({
-          phase: "running",
-          message: "API capture unavailable — falling back to Turbo…"
-        });
-        settings = Object.assign({}, settings, { mode: "turbo" });
       }
 
       const scroller = FBRI.getScrollableContainer(dialog);

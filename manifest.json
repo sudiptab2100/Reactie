@@ -21,22 +21,11 @@
         "src/stats.js",
         "src/keepalive.js",
         "src/inviter.js",
-        "src/api.js",
         "src/panel.js",
         "src/content.js"
       ],
       "css": ["src/panel.css"],
       "run_at": "document_idle",
-      "all_frames": false
-    },
-    {
-      "matches": [
-        "https://www.facebook.com/*",
-        "https://web.facebook.com/*"
-      ],
-      "js": ["src/api-hook.js"],
-      "run_at": "document_start",
-      "world": "MAIN",
       "all_frames": false
     }
   ],
