@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Page Reactor Inviter",
+  "name": "Reactie",
   "version": "1.0.0",
   "description": "As a Facebook Page admin, invite all uninvited people who reacted to a post to like your Page.",
   "permissions": ["storage"],
@@ -30,7 +30,7 @@
     }
   ],
   "action": {
-    "default_title": "Page Reactor Inviter",
+    "default_title": "Reactie",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",

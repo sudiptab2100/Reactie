@@ -1,4 +1,4 @@
-# Page Reactor Inviter
+# Reactie
 
 A Chrome extension (Manifest V3) for **Facebook Page admins**. When you open one of
 your Page's posts and view its reactions, it finds everyone who reacted but is **not
@@ -126,7 +126,7 @@ runs are **not** counted.
 2. Turn on **Developer mode** (top-right).
 3. Click **Load unpacked** and select this project folder
    (`FBExtenstion` — the one containing `manifest.json`).
-4. The extension is now active on `facebook.com`. A floating **Reactor Inviter** panel
+4. The extension is now active on `facebook.com`. A floating **Reactie** panel
    appears at the bottom-right of Facebook pages.
 
 To update after editing files, click the **reload** icon on the extension card.
@@ -169,7 +169,7 @@ Open **Settings** in the panel. Values persist via `chrome.storage`.
 | Safe delay min / max (ms) | Randomized wait between invites in **Safe** mode | 1500 / 4000 |
 | Fast delay min / max (ms) | Randomized wait between invites in **Fast** mode | 200 / 600 |
 | Turbo pause (ms) | Small pause between bursts in **Turbo** mode | 150 |
-| Max per run | Stop after this many invites. `0` = unlimited | 50 |
+| Max per run | Stop after this many invites. `0` = unlimited | 0 |
 | Long pause every | Take a longer cool-down after every N invites. `0` = off | 0 |
 | Long pause (ms) | Duration of that cool-down | 30000 |
 | Invite labels | Comma-separated button text that means "invite this person" | `Invite` |

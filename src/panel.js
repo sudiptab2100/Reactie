@@ -19,7 +19,7 @@
 
   const TEMPLATE = [
     '<div class="fbri-header">',
-    '  <span class="fbri-title">Reactor Inviter</span>',
+    '  <span class="fbri-title">Reactie</span>',
     '  <button class="fbri-min" title="Minimize">–</button>',
     "</div>",
     '<div class="fbri-body">',

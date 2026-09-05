@@ -30,7 +30,7 @@
     turboBatchPauseMs: 150,
 
     // Safety cap: stop after this many invites in one run. 0 = unlimited.
-    maxPerRun: 50,
+    maxPerRun: 0,
 
     // Optional longer cool-down. Pause after every N invites. 0 = disabled.
     longPauseEvery: 0,
