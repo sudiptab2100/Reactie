@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "Page Reactor Inviter",
+  "version": "1.0.0",
+  "description": "As a Facebook Page admin, invite all uninvited people who reacted to a post to like your Page.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://www.facebook.com/*",
+    "https://web.facebook.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.facebook.com/*",
+        "https://web.facebook.com/*"
+      ],
+      "js": [
+        "src/config.js",
+        "src/dom.js",
+        "src/page.js",
+        "src/stats.js",
+        "src/keepalive.js",
+        "src/inviter.js",
+        "src/api.js",
+        "src/panel.js",
+        "src/content.js"
+      ],
+      "css": ["src/panel.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "https://www.facebook.com/*",
+        "https://web.facebook.com/*"
+      ],
+      "js": ["src/api-hook.js"],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": false
+    }
+  ],
+  "action": {
+    "default_title": "Page Reactor Inviter",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "page-reactor-inviter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrome extension to invite uninvited Facebook post reactors to like your Page.",
+  "scripts": {
+    "test": "node test/logic.test.js",
+    "test:e2e": "node test/e2e.mock.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.0",
+    "puppeteer-core": "^25.10.0"
+  }
+}

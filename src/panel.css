@@ -1,0 +1,207 @@
+#fbri-panel {
+  position: fixed;
+  z-index: 2147483647;
+  right: 16px;
+  bottom: 16px;
+  width: 268px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #1c1e21;
+  background: #ffffff;
+  border: 1px solid #dadde1;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+#fbri-panel * {
+  box-sizing: border-box;
+}
+
+#fbri-panel .fbri-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1877f2;
+  color: #ffffff;
+  padding: 8px 10px;
+  cursor: move;
+  user-select: none;
+}
+
+#fbri-panel .fbri-title {
+  font-weight: 600;
+}
+
+#fbri-panel .fbri-min {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+#fbri-panel .fbri-body {
+  padding: 10px;
+}
+
+#fbri-panel.fbri-collapsed .fbri-body {
+  display: none;
+}
+
+#fbri-panel .fbri-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+#fbri-panel .fbri-start,
+#fbri-panel .fbri-stop,
+#fbri-panel .fbri-save {
+  flex: 1;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#fbri-panel .fbri-start {
+  background: #1877f2;
+  color: #ffffff;
+}
+
+#fbri-panel .fbri-start:disabled {
+  background: #9cc3f5;
+  cursor: default;
+}
+
+#fbri-panel .fbri-stop {
+  background: #e4e6eb;
+  color: #1c1e21;
+}
+
+#fbri-panel .fbri-stop:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+#fbri-panel .fbri-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+#fbri-panel .fbri-status {
+  background: #f0f2f5;
+  border-radius: 6px;
+  padding: 8px;
+  min-height: 34px;
+  margin-bottom: 8px;
+}
+
+#fbri-panel .fbri-stats {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+#fbri-panel .fbri-stats2 {
+  color: #606770;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+#fbri-panel .fbri-already,
+#fbri-panel .fbri-following {
+  font-weight: 600;
+  color: #1c1e21;
+}
+
+#fbri-panel .fbri-page-row .fbri-page-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+#fbri-panel .fbri-page-logo {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: none;
+  background: #e4e6eb;
+}
+
+#fbri-panel .fbri-page {
+  width: 140px;
+  padding: 4px 6px;
+  border: 1px solid #ccd0d5;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+#fbri-panel .fbri-count {
+  color: #1877f2;
+}
+
+#fbri-panel .fbri-settings summary {
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+#fbri-panel .fbri-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+#fbri-panel .fbri-field span {
+  color: #606770;
+}
+
+#fbri-panel .fbri-field input {
+  width: 120px;
+  padding: 4px 6px;
+  border: 1px solid #ccd0d5;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+#fbri-panel .fbri-field select {
+  flex: 1;
+  max-width: 160px;
+  padding: 4px 6px;
+  border: 1px solid #ccd0d5;
+  border-radius: 5px;
+  font-size: 12px;
+  background: #ffffff;
+}
+
+#fbri-panel .fbri-warn {
+  display: none;
+  background: #fff4e5;
+  color: #8a4b00;
+  border: 1px solid #ffd8a8;
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+#fbri-panel .fbri-save {
+  background: #42b72a;
+  color: #ffffff;
+  margin-top: 4px;
+  width: 100%;
+}
